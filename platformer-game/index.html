@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bounce's Big Adventure 🐰</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game-wrap">
+    <h1>🐰 Bounce's Big Adventure</h1>
+    <div id="hud">
+      <span id="score">⭐ Score: 0</span>
+      <span id="lives">❤️❤️❤️</span>
+    </div>
+    <canvas id="game" width="800" height="450"></canvas>
+    <p id="instructions">Use ⬅️ ➡️ (or A/D) to move, ⬆️ / W / Space to jump. Grab the stars, dodge the slime, and reach the flag!</p>
+    <div id="overlay" class="hidden">
+      <div id="overlay-box">
+        <h2 id="overlay-title">You Win!</h2>
+        <p id="overlay-message">Final Score: 0</p>
+        <button id="restart-btn">Play Again</button>
+      </div>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

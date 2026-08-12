@@ -1,0 +1,96 @@
+/* Cute & simple styling for Bounce's Big Adventure */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Comic Sans MS", "Segoe UI", Verdana, sans-serif;
+  background: linear-gradient(180deg, #bdeaff 0%, #eaffea 100%);
+  color: #3a3a3a;
+}
+
+#game-wrap {
+  text-align: center;
+  padding: 16px 24px 24px;
+  background: #ffffffcc;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+h1 {
+  margin: 4px 0 8px;
+  font-size: 1.8rem;
+}
+
+#hud {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0 4px 8px;
+}
+
+canvas {
+  background: linear-gradient(180deg, #aee4ff 0%, #dff6e0 100%);
+  border-radius: 16px;
+  border: 4px solid #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  display: block;
+  max-width: 100%;
+  touch-action: none;
+}
+
+#instructions {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+#overlay.hidden {
+  display: none;
+}
+
+#overlay-box {
+  background: #fffdf5;
+  padding: 28px 36px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+#overlay-box h2 {
+  margin-top: 0;
+  font-size: 2rem;
+}
+
+#restart-btn {
+  margin-top: 14px;
+  padding: 10px 22px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: #ff9ec4;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(255, 100, 150, 0.4);
+  transition: transform 0.1s ease;
+}
+
+#restart-btn:hover {
+  transform: scale(1.05);
+}
