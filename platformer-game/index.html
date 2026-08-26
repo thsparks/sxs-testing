@@ -8,18 +8,56 @@
 </head>
 <body>
   <div id="game-wrap">
-    <h1>🐰 Bounce's Big Adventure</h1>
-    <div id="hud">
-      <span id="score">⭐ Score: 0</span>
-      <span id="lives">❤️❤️❤️</span>
-    </div>
-    <canvas id="game" width="800" height="450"></canvas>
-    <p id="instructions">Use ⬅️ ➡️ (or A/D) to move, ⬆️ / W / Space to jump. Grab the stars, dodge the slime, and reach the flag!</p>
+    <header class="brand">
+      <span class="brand-badge">🐰</span>
+      <div>
+        <p class="eyebrow">A platforming journey</p>
+        <h1>Bounce's Big Adventure</h1>
+      </div>
+    </header>
+
+    <main id="menu-screen" class="screen">
+      <div class="hero-art" aria-hidden="true">🌈</div>
+      <p class="tagline">Hop, collect stars, and find your way home.</p>
+      <button id="play-btn" class="primary-btn">Play Adventure <span>→</span></button>
+      <button id="menu-levels-btn" class="text-btn">Choose a level</button>
+      <p class="hint">Arrow keys / A D to move · W / ↑ / Space to jump</p>
+    </main>
+
+    <main id="level-select" class="screen hidden">
+      <div class="screen-heading">
+        <div>
+          <p class="eyebrow">Your adventure</p>
+          <h2>Choose a level</h2>
+        </div>
+        <button id="back-menu-btn" class="icon-btn" aria-label="Back to menu">×</button>
+      </div>
+      <div id="level-grid"></div>
+    </main>
+
+    <main id="game-screen" class="hidden">
+      <div id="hud">
+        <button id="game-menu-btn" class="hud-btn">☰ Menu</button>
+        <span id="level-name">Meadow Morning</span>
+        <span id="score">⭐ 0</span>
+        <span id="lives">❤️❤️❤️</span>
+      </div>
+      <div class="canvas-shell">
+        <canvas id="game" width="800" height="450"></canvas>
+        <div id="level-progress" aria-hidden="true"><span></span></div>
+      </div>
+      <p id="instructions">Grab every star you can, dodge the slime, and reach the flag!</p>
+    </main>
+
     <div id="overlay" class="hidden">
       <div id="overlay-box">
+        <p class="eyebrow">Adventure update</p>
         <h2 id="overlay-title">You Win!</h2>
         <p id="overlay-message">Final Score: 0</p>
-        <button id="restart-btn">Play Again</button>
+        <div class="overlay-actions">
+          <button id="overlay-primary" class="primary-btn">Next level</button>
+          <button id="overlay-secondary" class="text-btn">Level select</button>
+        </div>
       </div>
     </div>
   </div>
