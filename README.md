@@ -23,7 +23,7 @@ Guide Bounce the rabbit across each level: collect ⭐ stars for points, stomp o
 
 ## Levels
 
-The game ships with 5 hand-built levels of increasing size and difficulty, from the short introductory `Meadow Morning` up to the sprawling, scrolling `Aurora Summit`. Larger levels use camera scrolling and a progress bar in the HUD to show how far you've traveled.
+The game ships with 5 hand-built levels of increasing size and difficulty, from the short introductory `Meadow Morning` up to the sprawling, scrolling `Aurora Summit`. Each level has its own scenery matching its name — a sunrise meadow, a shady mushroom grove, bright cloud-top cliffs, a dusk-lit temple, and a starry night summit under the aurora. Larger levels use camera scrolling and a progress bar in the HUD to show how far you've traveled.
 
 ## Project structure
 
