@@ -5,7 +5,6 @@
   const menuScreen = document.getElementById("menu-screen");
   const selectScreen = document.getElementById("level-select");
   const gameScreen = document.getElementById("game-screen");
-  const levelGrid = document.getElementById("level-grid");
   const overlay = document.getElementById("overlay");
   const overlayTitle = document.getElementById("overlay-title");
   const overlayMessage = document.getElementById("overlay-message");
@@ -29,16 +28,10 @@
   let unlocked = Math.min(5, Math.max(1, Number(localStorage.getItem("bounce-unlocked") || 1)));
 
   function showScreen(screen) { [menuScreen, selectScreen, gameScreen].forEach(s => s.classList.add("hidden")); screen.classList.remove("hidden"); }
-  function renderLevelSelect() {
-    levelGrid.innerHTML = "";
-    levelInfo.forEach((item, index) => {
-      const button = document.createElement("button");
-      button.className = "level-card"; button.disabled = index + 1 > unlocked;
-      button.innerHTML = `<span class="level-number">${index + 1}</span><h3>${item.icon} ${item.name}</h3><p>${item.description}${button.disabled ? " · Locked" : ""}</p>`;
-      button.addEventListener("click", () => startLevel(index));
-      levelGrid.appendChild(button);
-    });
-  }
+  // Best star count per level, shown on the world map.
+  let bestStars = (() => { try { return JSON.parse(localStorage.getItem("bounce-best")) || []; } catch { return []; } })();
+  const worldMap = createWorldMap({ levels: levelInfo, onPlay: index => startLevel(index), onBack: () => { worldMap.hide(); showScreen(menuScreen); } });
+  function renderLevelSelect() { showScreen(selectScreen); worldMap.show({ unlocked, best: bestStars, current: currentLevel }); }
   function makeLevel(index) {
     const data = levelInfo[index];
     level = { ...data, platforms: data.platforms.map(([x,y,w,h]) => ({x,y,w,h})), stars: data.stars.map(([x,y]) => ({x,y,r:10,taken:false})), goal: {x:data.goal[0], y:data.goal[1], w:30, h:60} };
@@ -57,14 +50,14 @@
   function updateHud() { scoreEl.textContent = `⭐ ${score}`; livesEl.textContent = "❤️".repeat(Math.max(lives, 0)) || "💀"; }
   function showOverlay(title, message, primaryText, primaryAction) { overlayTitle.textContent=title; overlayMessage.textContent=message; overlayPrimary.textContent=primaryText; overlayPrimary.onclick=primaryAction; overlay.classList.remove("hidden"); }
   function hideOverlay() { overlay.classList.add("hidden"); }
-  function goToSelect() { cancelAnimationFrame(animationId); hideOverlay(); renderLevelSelect(); showScreen(selectScreen); }
+  function goToSelect() { cancelAnimationFrame(animationId); hideOverlay(); renderLevelSelect(); }
   // Avoid allocating a new array on every call (this runs multiple times per frame).
   function pressed(a, b) { return !!(keys[a] || (b && keys[b])); }
   window.addEventListener("keydown", e => { keys[e.code]=true; if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Space"].includes(e.code)) e.preventDefault(); if(e.code==="Escape" && !gameScreen.classList.contains("hidden")) goToSelect(); });
   window.addEventListener("keyup", e => { keys[e.code]=false; });
   document.getElementById("play-btn").onclick = () => startLevel(Math.min(currentLevel, unlocked - 1));
-  document.getElementById("menu-levels-btn").onclick = () => { renderLevelSelect(); showScreen(selectScreen); };
-  document.getElementById("back-menu-btn").onclick = () => showScreen(menuScreen);
+  document.getElementById("menu-levels-btn").onclick = renderLevelSelect;
+  document.getElementById("back-menu-btn").onclick = () => { worldMap.hide(); showScreen(menuScreen); };
   document.getElementById("game-menu-btn").onclick = goToSelect;
   document.getElementById("overlay-secondary").onclick = goToSelect;
 
@@ -101,6 +94,7 @@
     if(overlap(player,level.goal)) {
       won=true; const last=currentLevel===levelInfo.length-1;
       if(currentLevel+2>unlocked) { unlocked=Math.min(5,currentLevel+2); localStorage.setItem("bounce-unlocked",unlocked); }
+      const got=level.stars.filter(c=>c.taken).length; if(!(bestStars[currentLevel]>=got)) { bestStars[currentLevel]=got; localStorage.setItem("bounce-best",JSON.stringify(bestStars)); }
       showOverlay(last?"Adventure Complete! 🎉":"Level Complete! ✨", `${score} points in ${level.name}.`, last?"Play again":"Next level", last?()=>startLevel(0):()=>startLevel(currentLevel+1));
     }
     cameraX=Math.max(0,Math.min(level.width-VIEW_WIDTH,player.x-VIEW_WIDTH*.35));
@@ -216,5 +210,5 @@
     ctx.restore();
   }
   function loop(){update();draw();if(!gameOver&&!won)animationId=requestAnimationFrame(loop);}
-  renderLevelSelect(); showScreen(menuScreen);
+  showScreen(menuScreen);
 })();

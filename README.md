@@ -7,7 +7,7 @@ A cute, lightweight 2D platformer built with plain HTML, CSS, and JavaScript —
 Open `platformer-game/index.html` in any modern browser (double-click it, or serve the folder with any static file server). From the main menu you can:
 
 - **Play Adventure** — jump straight into the next unlocked level.
-- **Choose a level** — pick from all 5 levels via the level select screen. Levels unlock in order as you complete them.
+- **Choose a level** — open the **Bunny Island world map**. Bounce hops along a winding path between the 5 levels; click a level (or use ← → / number keys) to hop there, then click it again or press Enter / **Play** to jump in. Levels unlock in order as you complete them, and the path to a newly unlocked level is revealed with a little celebration. Completed levels show a flag, and a gold star marks levels where you grabbed every star. The island also hides a few secrets for curious players to find (🔍 found secrets are counted on the map), and the 🔊 button toggles the map's sound effects.
 
 ### Controls
 
@@ -15,7 +15,9 @@ Open `platformer-game/index.html` in any modern browser (double-click it, or ser
 | --- | --- |
 | Move left / right | ⬅️ ➡️ or A / D |
 | Jump | ⬆️, W, or Space |
-| Back to level select | Esc |
+| Back to level select / menu | Esc |
+| World map: hop between levels | ⬅️ ➡️, A / D, or 1–5 |
+| World map: play selected level | Enter, Space, or click |
 
 ### Goal
 
@@ -29,8 +31,9 @@ The game ships with 5 hand-built levels of increasing size and difficulty, from 
 
 ```
 platformer-game/
-  index.html   # Markup for the menu, level select, and game screens
+  index.html   # Markup for the menu, world map, and game screens
   style.css    # All visual styling
+  worldmap.js  # Interactive world map level select (Canvas scenery, animation, synthesized sounds, secrets)
   game.js      # Game logic, rendering, and level data (vanilla JS + Canvas)
 ```
 
