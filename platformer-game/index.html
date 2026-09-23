@@ -27,12 +27,30 @@
     <main id="level-select" class="screen hidden">
       <div class="screen-heading">
         <div>
-          <p class="eyebrow">Your adventure</p>
-          <h2>Choose a level</h2>
+          <p class="eyebrow">World map</p>
+          <h2>Bunny Island</h2>
         </div>
         <button id="back-menu-btn" class="icon-btn" aria-label="Back to menu">×</button>
       </div>
-      <div id="level-grid"></div>
+      <div class="map-shell">
+        <canvas id="world-map" width="800" height="450" aria-label="World map. Use left and right arrow keys to hop between levels and Enter to play."></canvas>
+        <button id="map-mute" class="map-mute" aria-label="Mute sounds">🔊</button>
+        <div id="map-toast" class="map-toast hidden" role="status" aria-live="polite"></div>
+      </div>
+      <div id="map-card" aria-live="polite">
+        <div id="map-card-icon" class="map-card-icon" aria-hidden="true">🌼</div>
+        <div class="map-card-text">
+          <p id="map-card-eyebrow" class="eyebrow">Level 1</p>
+          <h3 id="map-card-name">Meadow Morning</h3>
+          <p id="map-card-desc">A gentle first hop</p>
+        </div>
+        <div class="map-card-stats">
+          <span id="map-card-stars">⭐ 0 / 6 stars</span>
+          <span id="map-secrets" class="hidden"></span>
+        </div>
+        <button id="map-play-btn" class="primary-btn">Play <span>→</span></button>
+      </div>
+      <p class="hint map-hint">Click a level or use ← → to hop · Enter to play · Esc to go back · Psst… the island hides a few secrets 👀</p>
     </main>
 
     <main id="game-screen" class="hidden">
@@ -61,6 +79,7 @@
       </div>
     </div>
   </div>
+  <script src="worldmap.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

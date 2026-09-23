@@ -18,8 +18,9 @@ This is a deliberate design choice, not an oversight:
 
 ```
 platformer-game/
-  index.html   # Markup for the menu, level select, and game screens
+  index.html   # Markup for the menu, world map, and game screens
   style.css    # All visual styling
+  worldmap.js  # Interactive world map level select
   game.js      # Game logic, rendering, and level data
 ```
 
@@ -27,9 +28,9 @@ platformer-game/
 
 1. Open `platformer-game/index.html` directly in a browser to test your changes — there's no build step.
 2. Keep new levels consistent with the existing data shape in `levelInfo` inside `game.js` (platforms, stars, enemy, goal, width, theme). Give each level a `theme` whose sky, celestial body, platform colors, decor, and enemy style match its name.
-3. If you add a level, make sure it's reachable from the level select screen and that the unlock progression still makes sense.
+3. If you add a level, make sure it's reachable from the world map: add a node position and colors to `NODES` (plus a path control point in `CTRL`) in `worldmap.js`, and check that the unlock progression still makes sense.
 4. Favor small, focused changes. Match the existing code style rather than introducing a new one.
-5. Manually verify: menu navigation, level select (including locked levels), core gameplay (movement, jumping, stars, enemies, goal), and both winning and losing a level.
+5. Manually verify: menu navigation, the world map (hopping, locked levels, unlock reveal), core gameplay (movement, jumping, stars, enemies, goal), and both winning and losing a level.
 
 ## Reporting issues
 
