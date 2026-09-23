@@ -7,7 +7,7 @@ A cute, lightweight 2D platformer built with plain HTML, CSS, and JavaScript —
 Open `platformer-game/index.html` in any modern browser (double-click it, or serve the folder with any static file server). From the main menu you can:
 
 - **Play Adventure** — jump straight into the next unlocked level.
-- **Choose a level** — pick from all 5 levels via the level select screen. Levels unlock in order as you complete them.
+- **Choose a level** — explore the illustrated world map, select a stop to preview it, then hop in. Levels unlock in order as you complete them; conquered stops are marked on the map. On smaller screens, scroll the map sideways to see the whole trail. Keep an eye out for little surprises along the way.
 
 ### Controls
 
@@ -16,6 +16,8 @@ Open `platformer-game/index.html` in any modern browser (double-click it, or ser
 | Move left / right | ⬅️ ➡️ or A / D |
 | Jump | ⬆️, W, or Space |
 | Back to level select | Esc |
+
+On the world map, use Tab to reach a stop, arrow keys to move between stops, and Enter to select one. The preview card's button starts unlocked levels.
 
 ### Goal
 

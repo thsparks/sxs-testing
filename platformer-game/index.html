@@ -27,12 +27,93 @@
     <main id="level-select" class="screen hidden">
       <div class="screen-heading">
         <div>
-          <p class="eyebrow">Your adventure</p>
-          <h2>Choose a level</h2>
+          <p class="eyebrow">Bounce's travel journal</p>
+          <h2>The world is yours to hop through</h2>
+          <p class="map-subtitle">Follow the trail from the meadow to the stars.</p>
         </div>
         <button id="back-menu-btn" class="icon-btn" aria-label="Back to menu">×</button>
       </div>
-      <div id="level-grid"></div>
+      <p class="map-scroll-hint">Swipe the map to follow the trail →</p>
+      <div class="map-frame">
+        <div class="world-map" role="group" aria-label="World map: five levels along a winding trail">
+          <svg class="map-art" viewBox="0 0 800 460" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="map-sky" x2=".9" y2="1">
+                <stop stop-color="#bceafa"/><stop offset=".52" stop-color="#f9e5c8"/><stop offset="1" stop-color="#efd3e9"/>
+              </linearGradient>
+              <linearGradient id="map-night" x2="0" y2="1">
+                <stop stop-color="#37316e"/><stop offset="1" stop-color="#7564a8"/>
+              </linearGradient>
+              <pattern id="map-dots" width="24" height="24" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1.2" fill="#fff" opacity=".45"/>
+              </pattern>
+            </defs>
+            <rect width="800" height="460" fill="url(#map-sky)"/>
+            <path d="M0 235 Q85 200 150 232 T300 191 Q390 124 470 174 Q545 206 605 142 Q690 65 800 92 L800 0 H0Z" fill="#e9f6ee" opacity=".65"/>
+            <path d="M0 300 Q120 265 190 307 Q280 355 360 280 Q450 193 525 237 Q615 294 800 184 L800 460 H0Z" fill="#9acda4"/>
+            <path d="M0 370 Q95 310 205 358 Q320 408 422 299 Q510 225 621 319 Q715 365 800 265 L800 460 H0Z" fill="#75b991"/>
+            <path d="M0 431 Q115 367 210 417 Q319 471 425 351 Q501 267 633 371 Q742 425 800 328 L800 460Z" fill="#5da886"/>
+            <path d="M452 192 Q511 182 532 238 Q559 280 610 266 Q648 258 683 205 L800 172 L800 0 H574 Q534 73 452 192Z" fill="url(#map-night)"/>
+            <path d="M472 189 Q518 181 539 229 Q569 277 616 259 Q654 247 681 195 L800 167 L800 0 H584 Q548 77 472 189Z" fill="url(#map-dots)" opacity=".7"/>
+            <path d="M518 183 Q572 105 639 90 Q705 78 770 25" fill="none" stroke="#91e6c3" stroke-width="18" opacity=".22" stroke-linecap="round"/>
+            <path d="M560 169 Q632 110 698 118 Q739 118 784 72" fill="none" stroke="#ccb5fc" stroke-width="12" opacity=".25" stroke-linecap="round"/>
+            <path d="M647 166 L710 44 L766 169Z" fill="#a5b5d6"/>
+            <path d="M678 105 L710 44 L743 105Z" fill="#f8f6fa"/>
+            <path d="M702 167 L756 79 L800 161Z" fill="#839bc3"/>
+            <path d="M733 116 L756 79 L780 117Z" fill="#f8f6fa"/>
+            <path d="M0 405 Q140 375 200 423 Q255 455 326 413" fill="none" stroke="#c7ebf1" stroke-width="18" opacity=".75"/>
+            <path d="M30 281 Q105 244 166 275 Q214 298 266 248" fill="none" stroke="#e4f6d4" stroke-width="25" stroke-linecap="round"/>
+            <path d="M289 295 Q335 238 420 225 Q464 208 487 243" fill="none" stroke="#e4f6d4" stroke-width="20" stroke-linecap="round"/>
+            <path d="M68 346 C123 362 175 322 249 278 S348 175 414 155 S502 302 570 295 S640 153 702 93" fill="none" stroke="#4e725e" stroke-width="16" stroke-linecap="round" opacity=".18"/>
+            <path d="M68 346 C123 362 175 322 249 278 S348 175 414 155 S502 302 570 295 S640 153 702 93" fill="none" stroke="#fff6dc" stroke-width="9" stroke-linecap="round" stroke-dasharray="2 16"/>
+            <g fill="#fff" opacity=".88">
+              <ellipse cx="310" cy="95" rx="53" ry="13"/><circle cx="290" cy="82" r="18"/><circle cx="318" cy="77" r="22"/><circle cx="338" cy="87" r="15"/>
+              <ellipse cx="422" cy="77" rx="39" ry="10"/><circle cx="407" cy="67" r="15"/><circle cx="429" cy="65" r="17"/>
+              <ellipse cx="367" cy="122" rx="30" ry="8"/><circle cx="356" cy="114" r="12"/><circle cx="374" cy="110" r="14"/>
+            </g>
+            <g fill="#426d64" opacity=".85">
+              <path d="M174 308 l12 -47 13 47Z M194 321 l11 -38 12 38Z M276 352 l13 -48 14 48Z M301 367 l10 -36 12 36Z"/>
+              <path d="M550 372 l12 -49 13 49Z M580 386 l11 -42 13 42Z M627 374 l12 -48 14 48Z"/>
+            </g>
+            <g fill="#fdf5db" opacity=".8">
+              <circle cx="622" cy="39" r="2"/><circle cx="675" cy="25" r="3"/><circle cx="761" cy="51" r="2"/>
+              <circle cx="792" cy="116" r="2"/><circle cx="595" cy="91" r="2"/><circle cx="650" cy="136" r="2"/>
+            </g>
+            <g transform="translate(537 330)" fill="#e9c5a9">
+              <path d="M0 8 L28 -5 L57 8Z"/><rect x="6" y="9" width="46" height="7"/>
+              <rect x="11" y="17" width="7" height="30"/><rect x="25" y="17" width="7" height="30"/><rect x="40" y="17" width="7" height="30"/>
+              <rect x="3" y="47" width="53" height="6"/>
+            </g>
+            <g transform="translate(216 337)">
+              <rect x="7" y="0" width="9" height="20" rx="4" fill="#fff0d6"/>
+              <path d="M0 5 Q2 -14 12 -12 Q24 -14 25 5Z" fill="#e8848a"/>
+              <circle cx="8" cy="-2" r="2" fill="#fff9e8"/><circle cx="17" cy="-5" r="2" fill="#fff9e8"/>
+            </g>
+            <g fill="#fbe8a5"><circle cx="30" cy="379" r="3"/><circle cx="52" cy="303" r="3"/><circle cx="128" cy="399" r="3"/><circle cx="153" cy="278" r="3"/></g>
+          </svg>
+          <span class="map-region region-meadow">THE MEADOWS</span>
+          <span class="map-region region-grove">WHISPER GROVE</span>
+          <span class="map-region region-sky">SKY COUNTRY</span>
+          <span class="map-region region-temple">OLD KINGDOM</span>
+          <span class="map-region region-summit">THE SUMMIT</span>
+          <div id="map-levels"></div>
+          <button class="map-secret secret-flower" data-secret="flower" aria-label="Inspect the little flower" title="A curious flower">✿</button>
+          <button class="map-secret secret-mushroom" data-secret="mushroom" aria-label="Inspect the tiny mushroom" title="A tiny mushroom">🍄</button>
+          <button class="map-secret secret-star" data-secret="star" aria-label="Inspect the twinkling star" title="A twinkling star">✦</button>
+        </div>
+      </div>
+      <div class="map-footer">
+        <div class="map-postcard">
+          <span id="map-preview-icon" class="map-preview-icon" aria-hidden="true">🌼</span>
+          <div class="map-preview-copy">
+            <p id="map-preview-status" class="eyebrow"></p>
+            <h3 id="map-preview-name"></h3>
+            <p id="map-preview-description"></p>
+          </div>
+          <button id="map-play-btn" class="primary-btn"></button>
+        </div>
+        <p id="map-discovery" class="map-discovery" aria-live="polite">Psst... this map has secrets. Try looking around!</p>
+      </div>
     </main>
 
     <main id="game-screen" class="hidden">
