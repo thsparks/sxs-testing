@@ -5,7 +5,14 @@
   const menuScreen = document.getElementById("menu-screen");
   const selectScreen = document.getElementById("level-select");
   const gameScreen = document.getElementById("game-screen");
-  const levelGrid = document.getElementById("level-grid");
+  const mapLevels = document.getElementById("map-levels");
+  const mapFrame = document.querySelector(".map-frame");
+  const mapPlayBtn = document.getElementById("map-play-btn");
+  const mapPreviewIcon = document.getElementById("map-preview-icon");
+  const mapPreviewStatus = document.getElementById("map-preview-status");
+  const mapPreviewName = document.getElementById("map-preview-name");
+  const mapPreviewDescription = document.getElementById("map-preview-description");
+  const mapDiscovery = document.getElementById("map-discovery");
   const overlay = document.getElementById("overlay");
   const overlayTitle = document.getElementById("overlay-title");
   const overlayMessage = document.getElementById("overlay-message");
@@ -24,20 +31,57 @@
     { name: "Twilight Temple", icon: "🏛️", description: "Long halls and tricky jumps", width: 1450, platforms: [[0,410,260,40],[320,350,140,20],[530,290,90,20],[690,370,160,20],[920,300,120,20],[1100,230,120,20],[1280,350,170,20],[410,200,100,20],[780,210,100,20],[1160,135,100,20]], stars: [[100,370],[380,315],[570,255],[760,335],[970,265],[1150,195],[1360,315],[455,165],[825,175],[1205,100]], enemy: [710,346,690,850], goal: [1370,290], theme: { sky:["#3d2f63","#f2a06b"], cloud:"#ffd9c266", body:{c:"#ff9d5c", glow:"#ffbe8a66", x:620, y:120, r:36}, platform:["#b3a5d6","#8a7bb0"], decor:"temple", enemy:"golem" } },
     { name: "Aurora Summit", icon: "🌌", description: "The final starry challenge", width: 1750, platforms: [[0,410,210,40],[270,330,120,20],[460,250,100,20],[620,360,150,20],[820,285,100,20],[980,210,130,20],[1170,340,150,20],[1360,260,110,20],[1530,180,180,20],[390,145,100,20],[700,165,90,20],[1110,125,100,20]], stars: [[100,370],[325,295],[510,215],[690,325],[865,250],[1040,175],[1240,305],[1410,225],[1600,145],[435,110],[745,130],[1155,90]], enemy: [640,336,620,770], goal: [1630,120], theme: { sky:["#0b1035","#31225e"], cloud:"#a9b6e044", body:{c:"#f4f1ff", glow:"#cfd8ff44", x:640, y:70, r:26}, platform:["#f2f7ff","#a9bcdf"], decor:"aurora", enemy:"frost" } }
   ];
-  let currentLevel = 0, level, player, coins, enemy, score, lives, invulnerable = 0;
+  const mapStops = [[8.5,75.2],[31.1,60.4],[51.75,33.7],[71.25,64.1],[87.75,20.2]];
+  const secretMessages = {
+    flower: "The flower hums a tiny tune. It sounds suspiciously like your victory song.",
+    mushroom: "A shy mushroom whispers: “The best shortcuts are the friends you make along the way.”",
+    star: "You found a runaway star! It promises to watch over your next jump."
+  };
+  const discoveredSecrets = new Set();
+  let selectedMapLevel = 0;
+  const savedCompleted = Number(localStorage.getItem("bounce-completed"));
+  let completed = Number.isInteger(savedCompleted) && savedCompleted >= 0 ? savedCompleted & 31 : 0;
+  const savedUnlocked = Number(localStorage.getItem("bounce-unlocked") || 1);
+  let unlocked = Number.isInteger(savedUnlocked) ? Math.min(5, Math.max(1, savedUnlocked)) : 1;
+  let currentLevel = unlocked - 1, level, player, coins, enemy, score, lives, invulnerable = 0;
   let cameraX = 0, gameOver = false, won = false, keys = {}, animationId, lastProgressPct = -1;
-  let unlocked = Math.min(5, Math.max(1, Number(localStorage.getItem("bounce-unlocked") || 1)));
 
   function showScreen(screen) { [menuScreen, selectScreen, gameScreen].forEach(s => s.classList.add("hidden")); screen.classList.remove("hidden"); }
+  function nextAdventureLevel() {
+    return Math.min(unlocked - 1, currentLevel + ((completed & (1 << currentLevel)) ? 1 : 0));
+  }
+  function openLevelSelect() {
+    renderLevelSelect();
+    showScreen(selectScreen);
+    const selectedNode = mapLevels.children[selectedMapLevel];
+    mapFrame.scrollLeft = selectedNode.offsetLeft - mapFrame.clientWidth / 2;
+  }
+  function selectMapLevel(index) {
+    selectedMapLevel = index;
+    mapLevels.querySelectorAll(".map-node").forEach((node, i) => node.setAttribute("aria-pressed", String(i === index)));
+    const item = levelInfo[index], locked = index + 1 > unlocked;
+    mapPreviewIcon.textContent = locked ? "🔒" : item.icon;
+    mapPreviewStatus.textContent = locked ? `Stop ${index + 1} · Not yet unlocked` : completed & (1 << index) ? `Stop ${index + 1} · Trail conquered!` : `Stop ${index + 1} · Ready to explore`;
+    mapPreviewName.textContent = item.name;
+    mapPreviewDescription.textContent = locked ? `Finish ${levelInfo[index - 1].name} to open this trail.` : item.description;
+    mapPlayBtn.disabled = locked;
+    mapPlayBtn.textContent = locked ? "Trail locked" : `Hop into level ${index + 1} →`;
+  }
   function renderLevelSelect() {
-    levelGrid.innerHTML = "";
+    mapLevels.replaceChildren();
     levelInfo.forEach((item, index) => {
       const button = document.createElement("button");
-      button.className = "level-card"; button.disabled = index + 1 > unlocked;
-      button.innerHTML = `<span class="level-number">${index + 1}</span><h3>${item.icon} ${item.name}</h3><p>${item.description}${button.disabled ? " · Locked" : ""}</p>`;
-      button.addEventListener("click", () => startLevel(index));
-      levelGrid.appendChild(button);
+      const locked = index + 1 > unlocked;
+      button.type = "button";
+      button.className = `map-node${locked ? " is-locked" : ""}${completed & (1 << index) ? " is-complete" : ""}`;
+      button.style.setProperty("--x", `${mapStops[index][0]}%`);
+      button.style.setProperty("--y", `${mapStops[index][1]}%`);
+      button.setAttribute("aria-label", `Level ${index + 1}: ${item.name}, ${locked ? "locked" : completed & (1 << index) ? "completed" : "unlocked"}`);
+      button.innerHTML = `<span class="map-node-icon" aria-hidden="true">${locked ? "🔒" : item.icon}</span><span class="map-node-number" aria-hidden="true">${completed & (1 << index) ? "✓" : index + 1}</span>`;
+      button.addEventListener("click", () => selectMapLevel(index));
+      mapLevels.appendChild(button);
     });
+    selectMapLevel(nextAdventureLevel());
   }
   function makeLevel(index) {
     const data = levelInfo[index];
@@ -57,13 +101,42 @@
   function updateHud() { scoreEl.textContent = `⭐ ${score}`; livesEl.textContent = "❤️".repeat(Math.max(lives, 0)) || "💀"; }
   function showOverlay(title, message, primaryText, primaryAction) { overlayTitle.textContent=title; overlayMessage.textContent=message; overlayPrimary.textContent=primaryText; overlayPrimary.onclick=primaryAction; overlay.classList.remove("hidden"); }
   function hideOverlay() { overlay.classList.add("hidden"); }
-  function goToSelect() { cancelAnimationFrame(animationId); hideOverlay(); renderLevelSelect(); showScreen(selectScreen); }
+  function goToSelect() { cancelAnimationFrame(animationId); hideOverlay(); openLevelSelect(); }
   // Avoid allocating a new array on every call (this runs multiple times per frame).
   function pressed(a, b) { return !!(keys[a] || (b && keys[b])); }
-  window.addEventListener("keydown", e => { keys[e.code]=true; if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Space"].includes(e.code)) e.preventDefault(); if(e.code==="Escape" && !gameScreen.classList.contains("hidden")) goToSelect(); });
+  window.addEventListener("keydown", e => {
+    if (!selectScreen.classList.contains("hidden") && e.target.classList?.contains("map-node") && ["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code)) {
+      e.preventDefault();
+      const step = e.code === "ArrowLeft" || e.code === "ArrowUp" ? -1 : 1;
+      const next = (selectedMapLevel + step + levelInfo.length) % levelInfo.length;
+      mapLevels.children[next].focus();
+      return;
+    }
+    keys[e.code]=true;
+    if (!gameScreen.classList.contains("hidden") && ["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Space"].includes(e.code)) e.preventDefault();
+    if(e.code==="Escape" && !gameScreen.classList.contains("hidden")) goToSelect();
+    else if(e.code==="Escape" && !selectScreen.classList.contains("hidden")) showScreen(menuScreen);
+  });
   window.addEventListener("keyup", e => { keys[e.code]=false; });
-  document.getElementById("play-btn").onclick = () => startLevel(Math.min(currentLevel, unlocked - 1));
-  document.getElementById("menu-levels-btn").onclick = () => { renderLevelSelect(); showScreen(selectScreen); };
+  mapLevels.addEventListener("focusin", e => {
+    const index = Array.prototype.indexOf.call(mapLevels.children, e.target);
+    if (index !== -1) selectMapLevel(index);
+  });
+  mapPlayBtn.addEventListener("click", () => {
+    if (selectedMapLevel < unlocked) startLevel(selectedMapLevel);
+  });
+  document.querySelectorAll(".map-secret").forEach(button => {
+    button.addEventListener("click", () => {
+      const secret = button.dataset.secret;
+      discoveredSecrets.add(secret);
+      button.classList.remove("found");
+      void button.offsetWidth;
+      button.classList.add("found");
+      mapDiscovery.textContent = `${secretMessages[secret]}  ·  ${discoveredSecrets.size}/3 wonders found`;
+    });
+  });
+  document.getElementById("play-btn").onclick = () => startLevel(nextAdventureLevel());
+  document.getElementById("menu-levels-btn").onclick = openLevelSelect;
   document.getElementById("back-menu-btn").onclick = () => showScreen(menuScreen);
   document.getElementById("game-menu-btn").onclick = goToSelect;
   document.getElementById("overlay-secondary").onclick = goToSelect;
@@ -100,6 +173,8 @@
     if(invulnerable>0) invulnerable--;
     if(overlap(player,level.goal)) {
       won=true; const last=currentLevel===levelInfo.length-1;
+      completed |= 1 << currentLevel;
+      localStorage.setItem("bounce-completed", completed);
       if(currentLevel+2>unlocked) { unlocked=Math.min(5,currentLevel+2); localStorage.setItem("bounce-unlocked",unlocked); }
       showOverlay(last?"Adventure Complete! 🎉":"Level Complete! ✨", `${score} points in ${level.name}.`, last?"Play again":"Next level", last?()=>startLevel(0):()=>startLevel(currentLevel+1));
     }
